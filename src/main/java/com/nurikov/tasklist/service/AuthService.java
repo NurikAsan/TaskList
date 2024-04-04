@@ -1,6 +1,9 @@
 package com.nurikov.tasklist.service;
 
-public class AuthService {
-    JWTResponce login(JWTRequest loginRequest);
-    JWTResponce refresh(String refreshToken);
+import com.nurikov.tasklist.web.dto.auth.JWTRequest;
+import com.nurikov.tasklist.web.dto.auth.JWTResponse;
+
+public interface AuthService {
+    JWTResponse login(JWTRequest loginRequest);
+    JWTResponse refresh(String refreshToken);
 }
