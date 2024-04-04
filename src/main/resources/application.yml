@@ -1,0 +1,13 @@
+spring:
+
+  application:
+    name: TaskList
+
+  datasource:
+    url:
+    username:
+    password:
+
+  sql:
+    init:
+      mode: always
