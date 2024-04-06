@@ -11,6 +11,7 @@ public class User {
 
     private Long id;
     private String username;
+    private String name;
     private String password;
     private String passwordConfirm;
     private Set<Role> role;
