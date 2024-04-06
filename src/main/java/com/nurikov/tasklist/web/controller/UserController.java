@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping("/{id}/tasks")
     public TaskDTO create(@PathVariable long id,
                           @Validated(OnCreate.class) @RequestBody TaskDTO taskDTO){
-        var task = taskService.create(taskMapper.toTask(taskDTO));
+        var task = taskService.create(taskMapper.toTask(taskDTO), id);
         return taskMapper.toDTO(task);
     }
 
