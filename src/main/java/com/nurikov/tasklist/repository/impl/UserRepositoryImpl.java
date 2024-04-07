@@ -61,8 +61,8 @@ public class UserRepositoryImpl implements UserRepository {
     private final String delete = "delete from users where id=?";
     @Override
     public Optional<User> findById(long id) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
+        try{
+            var connection = dataSourceConfig.getConnection();
             var statement = connection.prepareStatement(FIND_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             statement.setLong(1, id);
@@ -76,14 +76,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(FIND_BY_USERNAME, ResultSet.TYPE_SCROLL_INSENSITIVE,
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_USERNAME, ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             statement.setString(1, username);
-            try(var resultset = statement.executeQuery()){
-                return Optional.ofNullable(UserRowMapper.mapRow(resultset));
-            }
+            ResultSet resultset = statement.executeQuery();
+            return Optional.ofNullable(UserRowMapper.mapRow(resultset));
         } catch (SQLException e) {
             throw new ResourceMappingException("Error mapping findByUsername");
         }
