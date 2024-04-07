@@ -18,9 +18,10 @@ public class UserRepositoryImpl implements UserRepository {
     private final DataSourceConfig dataSourceConfig;
 
     private final String FIND_BY_ID = """
-            select u.id as user_id, u.name as user_name, u.username as user_username, u.password as user_password, ur.role as users_role_rol,
-            t.id as id, t.title as title, t.description as description, t.expiration_date as expiration_date,
-            t.status as status
+            select u.id as user_id, u.name as user_name, u.username as user_username,
+            u.password as user_password, ur.role as user_role,
+            t.id as task_id, t.title as task_title, t.description as task_description, t.expiration_date as task_expiration_date,
+            t.status as task_status
             from users u
             left join users_role ur on u.id=ur.user_id
             left join users_tasks ut on u.id=ut.user_id
@@ -28,9 +29,10 @@ public class UserRepositoryImpl implements UserRepository {
             where u.id=?
             """;
     private final String FIND_BY_USERNAME = """
-            select u.id as user_id, u.name as user_name, u.username as user_username, u.password as user_password, ur.role as users_role_rol,
-            t.id as id, t.title as title, t.description as description, t.expiration_date as expiration_date,
-            t.status as status
+            select u.id as user_id, u.name as user_name, u.username as user_username,
+            u.password as user_password, ur.role as user_role,
+            t.id as task_id, t.title as task_title, t.description as task_description, t.expiration_date as task_expiration_date,
+            t.status as task_status
             from users u
             left join users_role ur on u.id=ur.user_id
             left join users_tasks ut on u.id=ut.user_id

@@ -20,12 +20,20 @@ import java.util.Optional;
 public class TaskRepositoryImpl implements TaskRepository {
     private final DataSourceConfig dataSourceConfig;
 
-    private final String FIND_BY_ID = "SELECT * from tasks where id=?";
+    private final String FIND_BY_ID = """
+            SELECT t.id as task_id, t.title as task_title, 
+            t.description as task_description, t.status as task_status,
+            t.expiration_date as task_expiration_date
+            from tasks t
+            where id=?
+    """;
     private final String FIND_ALL_BY_USER_ID = """
-            SELECT t.id, t.title, t.description, t.status, t.expiration_date
+            SELECT t.id as task_id, t.title as task_title,
+            t.description as task_description, t.status as task_status,
+            t.expiration_date as task_expiration_date
             FROM tasks t
-            JOIN users_tasks on t.id=users_tasks.task_id
-            where user_id=?
+            JOIN users_tasks ut on t.id=ut.task_id
+            where ut.user_id=?
             """;
     private final String assignToUserId = "insert into users_tasks(user_id, task_id) values(?,?)";
     private final String update = """

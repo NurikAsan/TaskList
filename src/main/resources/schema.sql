@@ -1,20 +1,18 @@
-create database if not exists tasklist;
+create schema if not exists tasklist;
 
 create table if not exists users(
-    id int auto_increment,
+    id bigserial primary key,
     name varchar(150) not null,
     username varchar(150) not null unique,
-    password varchar(150) not null,
-    primary key(id)
+    password varchar(150) not null
 );
 
 create table if not exists tasks(
-    id int auto_increment,
+    id bigserial primary key,
     title varchar(150) not null,
     description varchar(150) null,
     status varchar(150) not null,
-    expiration_date timestamp null,
-    primary key(id)
+    expiration_date timestamp null
 );
 
 create table if not exists users_tasks(
@@ -25,7 +23,7 @@ create table if not exists users_tasks(
     foreign key(task_id) references tasks(id) on delete cascade on update no action
 );
 
-create table if not exists users_role(
+create table if not exists users_roles(
     user_id int not null,
     role varchar(100) not null,
     primary key(user_id, role),

@@ -16,7 +16,7 @@ public class UserRowMapper {
     public static User mapRow(ResultSet resultSet){
         Set<Role> roles = new HashSet<>();
         while (resultSet.next())
-            roles.add(Role.valueOf(resultSet.getString("users_role_rol")));
+            roles.add(Role.valueOf(resultSet.getString("user_role")));
         resultSet.beforeFirst();
         List<Task> tasks = TaskRowMapper.mapRows(resultSet);
         resultSet.beforeFirst();
