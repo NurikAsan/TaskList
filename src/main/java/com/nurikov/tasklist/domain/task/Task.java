@@ -6,10 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class Task {
-    private int id;
+    private long id;
     private String title;
     private String description;
     private Status status;
-    private LocalDateTime expirationData;
-
+    private LocalDateTime expirationDate;
 }

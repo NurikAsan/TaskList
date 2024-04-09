@@ -1,7 +1,7 @@
 package com.nurikov.tasklist.domain.user;
 
+import com.nurikov.tasklist.domain.task.Task;
 import lombok.Data;
-import org.springframework.scheduling.config.Task;
 
 import java.util.List;
 import java.util.Set;

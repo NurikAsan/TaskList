@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
-    private final UserDetailsService userDetailsService;
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
+
     private Key key;
 
     @PostConstruct
@@ -57,7 +58,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.toList());
     }
 
-    public String createRefreshToken(long userId, String username){
+    public String createRefreshToken(Long userId, String username){
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("id", userId);
         Date now = new Date();
@@ -118,5 +119,4 @@ public class JwtTokenProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
-
 }

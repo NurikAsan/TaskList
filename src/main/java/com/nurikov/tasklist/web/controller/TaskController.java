@@ -1,6 +1,5 @@
 package com.nurikov.tasklist.web.controller;
 
-import com.nurikov.tasklist.domain.task.Task;
 import com.nurikov.tasklist.service.TaskService;
 import com.nurikov.tasklist.web.dto.task.TaskDTO;
 import com.nurikov.tasklist.web.dto.validation.OnUpdate;
@@ -20,14 +19,14 @@ public class TaskController {
 
     @PutMapping
     public TaskDTO update(@Validated(OnUpdate.class) @RequestBody TaskDTO taskDTO){
-        var updatedTask = taskService.update(taskMapper.toTask(taskDTO));
-        return taskMapper.toDTO(updatedTask);
+        var updatedTask = taskService.update(taskMapper.toEntity(taskDTO));
+        return taskMapper.toDto(updatedTask);
     }
 
     @GetMapping("/{id}")
     public TaskDTO getById(@PathVariable long id){
         var task = taskService.getById(id);
-        return taskMapper.toDTO(task);
+        return taskMapper.toDto(task);
     }
 
     @DeleteMapping("/{id}")

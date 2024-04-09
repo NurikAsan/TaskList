@@ -29,20 +29,20 @@ public class UserController {
     @GetMapping("/{id}/tasks")
     public List<TaskDTO> getTasksByUserId(@PathVariable long id){
         List<Task> tasks = taskService.getAllByUserId(id);
-        return taskMapper.toDTO(tasks);
+        return taskMapper.toDto(tasks);
     }
 
     @PostMapping("/{id}/tasks")
     public TaskDTO create(@PathVariable long id,
                           @Validated(OnCreate.class) @RequestBody TaskDTO taskDTO){
-        var task = taskService.create(taskMapper.toTask(taskDTO));
-        return taskMapper.toDTO(task);
+        var task = taskService.create(taskMapper.toEntity(taskDTO), id);
+        return taskMapper.toDto(task);
     }
 
     @PutMapping
-    public TaskDTO update(@Validated(OnUpdate.class) @RequestBody TaskDTO taskDTO){
-        var updatedTask = taskService.update(taskMapper.toTask(taskDTO));
-        return taskMapper.toDTO(updatedTask);
+    public UserDTO update(@Validated(OnUpdate.class) @RequestBody UserDTO userDTO){
+        var updatedUser = userService.update(userMapper.toEntity(userDTO));
+        return userMapper.toDto(updatedUser);
     }
 
     @GetMapping("/{id}")
