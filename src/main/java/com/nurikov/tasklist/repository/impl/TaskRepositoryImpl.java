@@ -8,10 +8,7 @@ import com.nurikov.tasklist.repository.mappers.TaskRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +32,7 @@ public class TaskRepositoryImpl implements TaskRepository {
             JOIN users_tasks ut on t.id=ut.task_id
             where ut.user_id=?
             """;
-    private final String assignToUserId = "insert into users_tasks(user_id, task_id) values(?,?)";
+    private final String assignToUserId = "insert into users_tasks(task_id, user_id) values(?,?)";
     private final String update = """
             UPDATE tasks set title=?, description=?,
             expiration_date=?, status=?
@@ -45,12 +42,12 @@ public class TaskRepositoryImpl implements TaskRepository {
     private final String delete = "DELETE FROM tasks where id=?";
 
     @Override
-    public Optional<Task> findById(long id) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(FIND_BY_ID);
+    public Optional<Task> findById(Long id) {
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
-            try(var resultset = statement.executeQuery()){
+            try(ResultSet resultset = statement.executeQuery()){
                 return Optional.ofNullable(TaskRowMapper.mapRow(resultset));
             }
         } catch (SQLException e) {
@@ -59,26 +56,27 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllByUserId(long userId) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(FIND_ALL_BY_USER_ID);
+    public List<Task> findAllByUserId(Long userId) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_USER_ID);
             statement.setLong(1, userId);
-            try(var resultset = statement.executeQuery()){
+            try (ResultSet resultset = statement.executeQuery()) {
                 return TaskRowMapper.mapRows(resultset);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new ResourceMappingException("Error mapping findAllByUserId");
         }
     }
 
     @Override
-    public void assignToUserId(long taskId, long userId) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(assignToUserId);
-            statement.setLong(1, userId);
-            statement.setLong(2, taskId);
+    public void assignToUserId(Long taskId, Long userId) {
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(assignToUserId);
+            statement.setLong(1, taskId);
+            statement.setLong(2, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new ResourceMappingException("Error mapping assign");
@@ -87,19 +85,19 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void update(Task task) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(update);
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(update);
             statement.setString(1, task.getTitle());
 
             if(task.getDescription() == null)
                 statement.setNull(2, Types.VARCHAR);
             else
                 statement.setString(2, task.getDescription());
-            if(task.getExpirationData() == null)
+            if(task.getExpirationDate() == null)
                 statement.setNull(3, Types.TIMESTAMP);
             else
-                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationData()));
+                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
 
             statement.setString(4, task.getStatus().name());
             statement.setLong(5, task.getId());
@@ -111,19 +109,20 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void create(Task task) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(create, PreparedStatement.RETURN_GENERATED_KEYS);
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(create,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, task.getTitle());
 
             if(task.getDescription() == null)
                 statement.setNull(2, Types.VARCHAR);
             else
                 statement.setString(2, task.getDescription());
-            if(task.getExpirationData() == null)
+            if(task.getExpirationDate() == null)
                 statement.setNull(3, Types.TIMESTAMP);
             else
-                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationData()));
+                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
 
             statement.setString(4, task.getStatus().name());
             statement.executeUpdate();
@@ -137,10 +136,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void delete(long id) {
-        var connection = dataSourceConfig.getConnection();
-        try(connection){
-            var statement = connection.prepareStatement(delete);
+    public void delete(Long id) {
+        try{
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(delete);
             statement.setLong(1, id);
 
             statement.executeUpdate();

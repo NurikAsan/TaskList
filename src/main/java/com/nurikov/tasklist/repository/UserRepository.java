@@ -1,5 +1,6 @@
 package com.nurikov.tasklist.repository;
 
+
 import com.nurikov.tasklist.domain.user.Role;
 import com.nurikov.tasklist.domain.user.User;
 
@@ -10,7 +11,7 @@ public interface UserRepository {
     Optional<User> findByUsername(String username);
     void update(User user);
     void create(User user);
-    void insertUserRole(long userId, Role role);
-    boolean isTaskOwner(long userId, long taskId);
+    void insertUserRole(Long userId, Role role);
+    boolean isTaskOwner(Long userId, Long taskId);
     void delete(long id);
 }

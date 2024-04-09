@@ -1,7 +1,7 @@
 package com.nurikov.tasklist.service;
 
+
 import com.nurikov.tasklist.domain.user.User;
-import org.springframework.stereotype.Service;
 
 public interface UserService {
     User getById(long id);

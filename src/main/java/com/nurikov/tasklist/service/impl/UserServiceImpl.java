@@ -1,6 +1,5 @@
 package com.nurikov.tasklist.service.impl;
 
-import com.nurikov.tasklist.domain.exception.AccessDeniedException;
 import com.nurikov.tasklist.domain.exception.ResourceNotFoundException;
 import com.nurikov.tasklist.domain.user.Role;
 import com.nurikov.tasklist.domain.user.User;
@@ -13,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
