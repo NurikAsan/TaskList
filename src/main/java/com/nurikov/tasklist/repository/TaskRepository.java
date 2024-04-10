@@ -3,11 +3,13 @@ package com.nurikov.tasklist.repository;
 
 
 import com.nurikov.tasklist.domain.task.Task;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
 
+@Mapper
 public interface TaskRepository {
     Optional<Task> findById(Long id);
     List<Task> findAllByUserId(Long userId);
