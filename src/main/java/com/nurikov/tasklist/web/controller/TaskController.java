@@ -7,6 +7,7 @@ import com.nurikov.tasklist.web.mapper.TaskMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class TaskController {
 
     @PutMapping
     @Operation(summary = "update task")
+    @PreAuthorize("canAccessTask(#taskDTO.id)")
     public TaskDTO update(@Validated(OnUpdate.class) @RequestBody TaskDTO taskDTO){
         var updatedTask = taskService.update(taskMapper.toEntity(taskDTO));
         return taskMapper.toDto(updatedTask);
@@ -29,14 +31,16 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @Operation(summary = "get task by id")
-    public TaskDTO getById(@PathVariable long id){
+    @PreAuthorize("canAccessTask(#id)")
+    public TaskDTO getById(@PathVariable Long id){
         var task = taskService.getById(id);
         return taskMapper.toDto(task);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "delete task")
-    public void delete(@PathVariable long id){
+    @PreAuthorize("canAccessTask(#id)")
+    public void delete(@PathVariable Long id){
         taskService.delete(id);
     }
 }
