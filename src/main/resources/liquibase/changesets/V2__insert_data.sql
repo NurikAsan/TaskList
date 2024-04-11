@@ -1,5 +1,5 @@
 insert into users (name, username, password)
-values ('John Doe', 'johndoe@gmail.com', '$2a$10$Xl0yhvzLIaJCDdKBS0Lld.ksK7c2Zytg/ZKFdtIYYQUv8rUfvCR4W'),
+values ('John Doe', 'johndoe@gmail.com', '$2a$12$6adkzdpy4KPvIuCKmGMSGOXAPn0n6y05TdGo8GLbgF3KudJFIzsvu'),
        ('Mike Smith', 'mikesmith@yahoo.com', '$2a$10$fFLij9aYgaNCFPTL9WcA/uoCRukxnwf.vOQ8nrEEOskrCNmGsxY7m');
 
 insert into tasks (title, description, status, expiration_date)
