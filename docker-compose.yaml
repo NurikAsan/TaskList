@@ -10,7 +10,7 @@ services:
   app:
     build:
       context: .
-    container_name: tasklist
+    container_name: db
     depends_on:
       - db
     env_file:
