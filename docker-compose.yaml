@@ -20,7 +20,7 @@ services:
 
   db:
     image: postgres:15.1-alpine
-    container_name: db
+    container_name: postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -28,6 +28,7 @@ services:
     volumes:
       - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
+
 
   redis:
     image: redis:7.2-rc-alpine

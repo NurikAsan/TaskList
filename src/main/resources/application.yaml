@@ -24,14 +24,14 @@ spring:
     enabled: true
     default-schema: ${POSTGRES_SCHEMA}
 
-  sql:
-    init:
-      mode: never
-      continue-on-error: false
+#  sql:
+#    init:
+#      mode: never
+#      continue-on-error: false
 #      data-locations: classpath:demo_data.sql
 
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
+#mybatis:
+#  mapper-locations: classpath:mybatis/mapper/*.xml
 
 security:
   jwt:
