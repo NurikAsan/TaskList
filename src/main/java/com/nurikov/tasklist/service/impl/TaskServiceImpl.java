@@ -3,6 +3,7 @@ package com.nurikov.tasklist.service.impl;
 import com.nurikov.tasklist.domain.exception.ResourceNotFoundException;
 import com.nurikov.tasklist.domain.task.Status;
 import com.nurikov.tasklist.domain.task.Task;
+import com.nurikov.tasklist.domain.task.TaskImage;
 import com.nurikov.tasklist.repository.TaskRepository;
 import com.nurikov.tasklist.service.TaskService;
 import com.nurikov.tasklist.service.UserService;
@@ -62,5 +63,15 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void delete(long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "TaskService::getById", key = "#id")
+    public void uploadImage(Long id, TaskImage taskImage) {
+        Task task = getById(id);
+        String image = imageService.upload(taskImage);
+        task.getImages().add(image);
+        taskRepository.save(task);
     }
 }
