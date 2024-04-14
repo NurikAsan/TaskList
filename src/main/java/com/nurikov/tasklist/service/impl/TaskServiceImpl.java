@@ -5,6 +5,7 @@ import com.nurikov.tasklist.domain.task.Status;
 import com.nurikov.tasklist.domain.task.Task;
 import com.nurikov.tasklist.repository.TaskRepository;
 import com.nurikov.tasklist.service.TaskService;
+import com.nurikov.tasklist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
     @Override
     @Cacheable(value = "TaskService::getById", key = "#id")
@@ -37,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
     public Task update(Task task) {
         if(task.getStatus() == null)
             task.setStatus(Status.TODO);
-        taskRepository.update(task);
+        taskRepository.save(task);
         return task;
     }
 
@@ -45,9 +47,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Cacheable(value = "TaskService::getById", key = "#task.id")
     public Task create(Task task, long userId) {
+        var user = userService.getById(userId);
+
         task.setStatus(Status.TODO);
-        taskRepository.create(task);
-        taskRepository.assignToUserId(task.getId(), userId);
+        taskRepository.save(task);
+        user.getTask().add(task);
+        userService.update(user);
+
         return task;
     }
 
@@ -55,6 +61,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void delete(long id) {
-        taskRepository.delete(id);
+        taskRepository.deleteById(id);
     }
 }

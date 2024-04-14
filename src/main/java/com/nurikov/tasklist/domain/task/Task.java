@@ -5,13 +5,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "tasks")
 public class Task implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
     private String description;
@@ -21,4 +22,9 @@ public class Task implements Serializable {
 
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
+
+    @Column(name = "image")
+    @CollectionTable(name = "tasks_images")
+    @ElementCollection
+    private List<String> images;
 }
