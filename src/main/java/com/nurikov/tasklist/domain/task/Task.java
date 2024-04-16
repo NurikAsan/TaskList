@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "tasks")
 public class Task implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String description;
@@ -23,8 +23,8 @@ public class Task implements Serializable {
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
 
-    @Column(name = "image")
     @CollectionTable(name = "tasks_images")
+    @Column(name = "image")
     @ElementCollection
     private List<String> images;
 }
