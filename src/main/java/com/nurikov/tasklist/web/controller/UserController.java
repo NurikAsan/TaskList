@@ -49,7 +49,7 @@ public class UserController {
 
     @PutMapping
     @Operation(summary = "update user")
-    @PreAuthorize("@customSecurityExpression.canAccessUser(#userDto.id)")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#userDTO.id)")
     public UserDTO update(@Validated(OnUpdate.class) @RequestBody UserDTO userDTO){
         var updatedUser = userService.update(userMapper.toEntity(userDTO));
         return userMapper.toDto(updatedUser);
