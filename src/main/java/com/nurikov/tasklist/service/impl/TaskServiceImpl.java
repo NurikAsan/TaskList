@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -53,7 +54,8 @@ public class TaskServiceImpl implements TaskService {
 
         task.setStatus(Status.TODO);
         taskRepository.save(task);
-        user.getTask().add(task);
+
+        user.setTask(Collections.singletonList(task));
         userService.update(user);
 
         return task;
