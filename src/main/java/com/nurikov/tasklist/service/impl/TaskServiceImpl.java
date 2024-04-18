@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     @Override
-    @CachePut(value = "TaskService::getById", key = "#task.id")
+    @CachePut(value = "TaskService::getById", condition = "#task.id!=null", key = "#task.id")
     public Task update(Task task) {
         if(task.getStatus() == null)
             task.setStatus(Status.TODO);
@@ -48,16 +48,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     @Override
-    @Cacheable(value = "TaskService::getById", key = "#task.id")
+    @Cacheable(value = "TaskService::getById", condition = "#task.id!=null", key = "#task.id")
     public Task create(Task task, long userId) {
-        var user = userService.getById(userId);
-
         task.setStatus(Status.TODO);
         taskRepository.save(task);
-
-        user.setTask(Collections.singletonList(task));
-        userService.update(user);
-
+        taskRepository.assignTask(userId, task.getId());
         return task;
     }
 
