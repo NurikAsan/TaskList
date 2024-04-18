@@ -1,0 +1,13 @@
+type Query {
+    userById(id: ID): User
+    tasksByUserId(id: ID): [Task]
+    taskById(id: ID): Task
+}
+
+type Mutation {
+    updateUser(userDTO: InputUser): User
+    deleteUser(id: ID): Boolean
+    createTask(id: ID taskDTO: InputTask): Task
+    updateTask(taskDTO: InputTask): Task
+    deleteTask(id: ID): Boolean
+}
