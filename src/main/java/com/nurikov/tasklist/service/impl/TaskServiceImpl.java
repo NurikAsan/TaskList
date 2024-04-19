@@ -5,8 +5,8 @@ import com.nurikov.tasklist.domain.task.Status;
 import com.nurikov.tasklist.domain.task.Task;
 import com.nurikov.tasklist.domain.task.TaskImage;
 import com.nurikov.tasklist.repository.TaskRepository;
+import com.nurikov.tasklist.service.ImageService;
 import com.nurikov.tasklist.service.TaskService;
-import com.nurikov.tasklist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -14,7 +14,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,8 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final UserService userService;
-    private final ImageServiceImpl imageService;
+    private final ImageService imageService;
 
     @Override
     @Cacheable(value = "TaskService::getById", key = "#id")
@@ -67,9 +65,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void uploadImage(Long id, TaskImage taskImage) {
-        Task task = getById(id);
-        String image = imageService.upload(taskImage);
-        task.getImages().add(image);
-        taskRepository.save(task);
+        String fileName = imageService.upload(taskImage);
+        taskRepository.addImage(id, fileName);
     }
 }
