@@ -8,6 +8,7 @@ public interface UserService {
     User getByUsername(String username);
     User update(User user);
     User create(User user);
+    User getTaskAuthor(Long id);
     boolean isTaskOwner(long userId, long taskId);
     void delete(long id);
 }

@@ -13,6 +13,21 @@ spring:
     graphiql:
       enabled: true
 
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    port: ${SPRING_MAIL_PORT}
+    properties:
+      mail:
+        debug: false
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   application:
     name: TaskList
 

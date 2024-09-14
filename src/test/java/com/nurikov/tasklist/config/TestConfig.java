@@ -2,24 +2,20 @@ package com.nurikov.tasklist.config;
 
 import com.nurikov.tasklist.repository.TaskRepository;
 import com.nurikov.tasklist.repository.UserRepository;
-import com.nurikov.tasklist.service.AuthService;
-import com.nurikov.tasklist.service.ImageService;
-import com.nurikov.tasklist.service.TaskService;
-import com.nurikov.tasklist.service.UserService;
-import com.nurikov.tasklist.service.impl.AuthServiceImpl;
-import com.nurikov.tasklist.service.impl.ImageServiceImpl;
-import com.nurikov.tasklist.service.impl.TaskServiceImpl;
-import com.nurikov.tasklist.service.impl.UserServiceImpl;
+import com.nurikov.tasklist.service.*;
+import com.nurikov.tasklist.service.impl.*;
 import com.nurikov.tasklist.service.props.JwtProperties;
 import com.nurikov.tasklist.service.props.MinioProperties;
 import com.nurikov.tasklist.web.security.JwtTokenProvider;
 import com.nurikov.tasklist.web.security.JwtUserDetailsService;
+import freemarker.template.Configuration;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -78,11 +74,27 @@ public class TestConfig {
     }
 
     @Bean
+    public JavaMailSender mailSender(){
+        return Mockito.mock(JavaMailSender.class);
+    }
+
+    @Bean
+    public Configuration configuration(){
+        return Mockito.mock(Configuration.class);
+    }
+
+    @Bean
+    @Primary
+    public MailServiceImpl mailService(){
+        return new MailServiceImpl(configuration(), mailSender());
+    }
+    @Bean
     @Primary
     public UserService userService() {
         return new UserServiceImpl(
                 userRepository,
-                testPasswordEncoder()
+                testPasswordEncoder(),
+                mailService()
         );
     }
 
